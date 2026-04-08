@@ -277,12 +277,14 @@ h1, h2, h3, h4 {
 
 /* Portfolio Section */
 .portfolio {
-    padding: 8rem 4rem;
+    padding: 8rem 0;
+    overflow: hidden;
 }
 
 .portfolio-header {
     text-align: center;
     margin-bottom: 5rem;
+    padding: 0 4rem;
 }
 
 .portfolio-header p {
@@ -290,50 +292,69 @@ h1, h2, h3, h4 {
     font-size: 1.2rem;
 }
 
-.masonry-grid {
-    column-count: 3;
-    column-gap: 2rem;
-    max-width: 1600px;
+/* Asymmetric Parallax Gallery */
+.gallery-grid {
+    display: flex;
+    gap: 3rem;
+    padding: 0 4rem;
+    width: 100%;
+    max-width: 1800px;
     margin: 0 auto;
 }
 
-.masonry-item {
-    break-inside: avoid;
-    margin-bottom: 2rem;
+.gallery-col {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+    flex: 1;
+}
+
+/* Create the asymmetric editorial look */
+.gallery-col:nth-child(2) {
+    margin-top: 15rem;
+}
+.gallery-col:nth-child(3) {
+    margin-top: 7rem;
+}
+
+.gallery-item {
+    position: relative;
     border-radius: 16px;
     overflow: hidden;
-    position: relative;
-    cursor: auto; /* changed from pointer because we are not navigating */
+    /* initial state for scroll reveal */
+    opacity: 0;
+    transform: translateY(60px);
+    transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1), transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    background: #111;
 }
 
-.masonry-item img {
+.gallery-item.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.img-parallax-wrap {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    position: relative;
+}
+
+.img-parallax-wrap img {
+    display: block;
     width: 100%;
     height: auto;
-    display: block;
-    transition: transform 0.5s ease, filter 0.5s ease;
-    filter: brightness(0.8) grayscale(20%);
+    object-fit: cover;
+    /* Scale up so there's room to move up/down for parallax */
+    transform: scale(1.2) translateY(0);
+    will-change: transform;
+    filter: brightness(0.6) grayscale(40%);
+    transition: filter 0.5s ease;
 }
 
-.masonry-item:hover img {
-    transform: scale(1.03);
-    filter: brightness(1) grayscale(0%);
-}
-
-.masonry-overlay {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    padding: 2rem;
-    background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
-    transform: translateY(20px);
-    opacity: 0;
-    transition: all 0.3s ease;
-}
-
-.masonry-item:hover .masonry-overlay {
-    transform: translateY(0);
-    opacity: 1;
+.gallery-item:hover .img-parallax-wrap img {
+    filter: brightness(1.1) grayscale(0%);
 }
 
 /* Footer Section */
@@ -410,9 +431,6 @@ h1, h2, h3, h4 {
     .philosophy-grid {
         grid-template-columns: 1fr;
     }
-    .masonry-grid {
-        column-count: 2;
-    }
 }
 
 @media (max-width: 768px) {
@@ -428,9 +446,6 @@ h1, h2, h3, h4 {
     .hero-title {
         font-size: 3.5rem;
     }
-    .masonry-grid {
-        column-count: 1;
-    }
     .footer-bottom {
         grid-template-columns: 1fr 1fr;
     }
@@ -445,4 +460,113 @@ h1, h2, h3, h4 {
     .huge-text {
         font-size: 4rem;
     }
+}
+
+/* Floating CTA & Modal */
+.floating-cta {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    background-color: var(--accent);
+    color: var(--bg-darker);
+    padding: 1.25rem 2.5rem;
+    border-radius: 100px;
+    font-weight: 800;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    border: none;
+    z-index: 900;
+    box-shadow: 0 10px 30px rgba(229, 248, 61, 0.2);
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.floating-cta:hover {
+    transform: scale(1.05) translateY(-5px);
+}
+
+.contact-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    z-index: 2000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s ease;
+}
+
+.contact-modal.active {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.modal-content {
+    background: var(--bg-darker);
+    border: 1px solid var(--glass-border);
+    padding: 4rem;
+    border-radius: 24px;
+    width: 90%;
+    max-width: 500px;
+    position: relative;
+    transform: translateY(50px);
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.contact-modal.active .modal-content {
+    transform: translateY(0);
+}
+
+.close-modal {
+    position: absolute;
+    top: 1.5rem;
+    right: 2rem;
+    font-size: 2.5rem;
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.close-modal:hover {
+    color: var(--accent);
+}
+
+.modal-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.modal-form input,
+.modal-form textarea {
+    width: 100%;
+    background: var(--bg-dark);
+    border: 1px solid var(--glass-border);
+    padding: 1.2rem;
+    border-radius: 12px;
+    color: var(--text-primary);
+    font-family: inherit;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+}
+
+.modal-form textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+.modal-form input:focus,
+.modal-form textarea:focus {
+    outline: none;
+    border-color: var(--accent);
 }

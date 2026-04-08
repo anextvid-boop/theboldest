@@ -65,8 +65,8 @@
             <p>Our work speaks for itself.</p>
         </div>
         
-        <div class="masonry-grid" id="masonry-container">
-            <!-- Will be populated by JS -->
+        <div class="gallery-grid" id="gallery-container">
+            <!-- Populated by JS in exact sequence with scroll reveal effect -->
         </div>
     </section>
 
@@ -100,6 +100,25 @@
             <p>&copy; 2026 THE BOLDEST STUDIO. ALL RIGHTS RESERVED.</p>
         </div>
     </footer>
+
+    <!-- Conversion Elements -->
+    <button class="floating-cta" id="floating-cta">START A PROJECT</button>
+
+    <div class="contact-modal" id="contact-modal">
+        <div class="modal-content">
+            <button class="close-modal" id="close-modal">&times;</button>
+            <h2 class="section-title">LET'S BUILD.</h2>
+            <form class="modal-form" id="contact-form">
+                <input type="text" placeholder="Your Name" required>
+                <input type="email" placeholder="Your Email" required>
+                <textarea placeholder="Tell us about the project..." required></textarea>
+                <button type="submit" class="cta-button primary" style="width: 100%; justify-content: center;">SEND INQUIRY</button>
+            </form>
+            <div id="success-msg" style="display: none; color: var(--accent); margin-top: 1rem; font-weight: 500; text-align: center;">
+                Application Received. We'll be in touch.
+            </div>
+        </div>
+    </div>
 
     <script src="script.js"></script>
 </body>
